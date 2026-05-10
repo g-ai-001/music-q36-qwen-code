@@ -17,7 +17,23 @@
 
 ## 版本介绍
 
-### v0.2.1 (最新版本)
+### v0.2.2 (最新版本)
+
+**发布日期**: 2026-05-11
+
+**修复**:
+- 修复 CI 构建失败问题（多个编译错误：Composable引用、Hilt依赖、类型不匹配等）
+- 修复 MainActivity.kt 缺少 mutableStateOf 和 Column 导入
+- 修复 PlayerScreen.kt 时间参数类型从 Int 改为 Long
+- 移除 DatabaseModule.kt 中未使用的 Hilt/Dagger 注解
+- 修复 MusicService.kt 中 MediaSession Token 类型不匹配
+- 修复 HomeScreen.kt 中 tabIndicatorOffset 在 Material3 中已移除
+- 修复 Logger.kt 中 Array 不支持 removeAt
+- 修复 ViewModel 中 const val 不能在类实例中使用
+
+**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.2.2)
+
+### v0.2.1 (已发布)
 
 **发布日期**: 2026-05-11
 
