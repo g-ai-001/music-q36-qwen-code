@@ -17,7 +17,25 @@
 
 ## 版本介绍
 
-### v0.3.0 (最新版本)
+### v0.3.1 (最新版本)
+
+**发布日期**: 2026-05-11
+
+**重构优化**:
+- 修复PlayerScreen歌词时间单位不一致Bug(移除错误的*1000)
+- 修复MainActivity onDestroy中Logger未关闭问题
+- 修复PlayerManager与ExoPlayer脱节问题(添加setPlayerInstance)
+- 修复MusicService onIsPlayingChanged循环调用问题
+- 修复LibraryViewModel searchSongs嵌套launchIn问题
+- 修复PlayerViewModel toggleFavorite竞态条件问题
+- 提取重复UI组件(RecentlyPlayedItem, SectionHeader)到CommonComponents
+- 统一颜色常量(PurpleGradient, ButtonGreen等)替换硬编码颜色
+- 清理未使用的导入(HomeScreen, MeScreen, PlayerScreen)
+- 优化代码结构和可读性
+
+**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.3.1)
+
+### v0.3.0
 
 **发布日期**: 2026-05-11
 
