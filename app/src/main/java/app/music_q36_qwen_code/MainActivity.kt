@@ -115,6 +115,8 @@ fun MainScreen(
     var showPlayerScreen by remember { mutableStateOf(false) }
 
     val playerState by playerViewModel.playerState.collectAsState()
+    val lyrics by playerViewModel.lyrics.collectAsState()
+    val isFavorite by playerViewModel.isFavorite.collectAsState()
 
     if (showPlayerScreen) {
         PlayerScreen(
@@ -122,18 +124,14 @@ fun MainScreen(
             isPlaying = playerState.isPlaying,
             currentPosition = playerState.currentPosition,
             duration = playerState.duration,
-            lyrics = emptyList(), // TODO: 从 LyricParser 加载歌词
+            lyrics = lyrics.map { it.time to it.text },
             onPlayPauseClick = { playerViewModel.togglePlayPause() },
-            onNextClick = { /* TODO: 下一首 */ },
-            onPreviousClick = { /* TODO: 上一首 */ },
+            onNextClick = { playerViewModel.playNext() },
+            onPreviousClick = { playerViewModel.playPrevious() },
             onSeekTo = { position -> playerViewModel.seekTo(position) },
             onBackClick = { showPlayerScreen = false },
-            onFavoriteClick = {
-                playerState.currentSong?.let { song ->
-                    // TODO: 切换收藏状态
-                }
-            },
-            isFavorite = false // TODO: 从 ViewModel 获取收藏状态
+            onFavoriteClick = { playerViewModel.toggleFavorite() },
+            isFavorite = isFavorite
         )
         return
     }

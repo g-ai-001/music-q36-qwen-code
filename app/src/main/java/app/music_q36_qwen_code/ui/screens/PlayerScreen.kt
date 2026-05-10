@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -301,7 +302,13 @@ fun CoverModeContent(
 
         // 歌词预览（显示当前行）
         if (lyrics.isNotEmpty()) {
-            val currentLyric = lyrics.find { it.first <= currentPosition * 1000L }?.second ?: "暂无歌词"
+            val currentPositionMs = currentPosition * 1000L
+            val currentLyricIndex = lyrics.indexOfLast { it.first <= currentPositionMs }
+            val currentLyric = if (currentLyricIndex >= 0) {
+                lyrics[currentLyricIndex].second
+            } else {
+                "暂无歌词"
+            }
             Text(
                 text = currentLyric,
                 color = Color.White.copy(alpha = 0.5f),
@@ -343,6 +350,22 @@ fun LyricsModeContent(
     onPlayPauseClick: () -> Unit,
     isPlaying: Boolean
 ) {
+    val listState = rememberLazyListState()
+    val currentPositionMs = currentPosition * 1000L
+
+    // 自动滚动到当前歌词行
+    LaunchedEffect(lyrics, currentPositionMs) {
+        if (lyrics.isNotEmpty()) {
+            val currentIndex = lyrics.indexOfLast { it.first <= currentPositionMs }
+            if (currentIndex >= 0) {
+                listState.animateScrollToItem(
+                    index = currentIndex,
+                    scrollOffset = 0
+                )
+            }
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
@@ -381,10 +404,11 @@ fun LyricsModeContent(
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                contentPadding = PaddingValues(vertical = 40.dp)
+                contentPadding = PaddingValues(vertical = 40.dp),
+                state = listState
             ) {
                 itemsIndexed(lyrics) { index, lyric ->
-                    val timeDiff = abs(lyric.first - currentPosition * 1000L)
+                    val timeDiff = abs(lyric.first - currentPositionMs)
                     val isCurrentLine = timeDiff < 3000L
 
                     Text(
