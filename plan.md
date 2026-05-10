@@ -12,14 +12,14 @@
 修复 GitHub Actions CI 构建失败问题，解决所有编译错误。
 
 ### 任务清单
-- [ ] 修复 MainActivity.kt 编译错误（mutableStateOf、Column 等 Composable 引用、类型不匹配）
-- [ ] 修复 DatabaseModule.kt 编译错误（Hilt/Dagger 依赖注入问题）
-- [ ] 修复 MusicService.kt 编译错误（MediaSession Token 类型不匹配）
-- [ ] 修复 HomeScreen.kt 编译错误（tabIndicatorOffset 找不到）
-- [ ] 修复 Logger.kt 编译错误（removeAt 方法问题）
-- [ ] 修复 LibraryViewModel.kt 和 PlayerViewModel.kt 编译错误（const val 位置问题）
-- [ ] 确保 GitHub Actions workflow 无报错
-- [ ] 更新 versionName 到 0.2.2
+- [x] 修复 MainActivity.kt 编译错误（mutableStateOf、Column 等 Composable 引用、类型不匹配）
+- [x] 修复 DatabaseModule.kt 编译错误（Hilt/Dagger 依赖注入问题）
+- [x] 修复 MusicService.kt 编译错误（MediaSession Token 类型不匹配）
+- [x] 修复 HomeScreen.kt 编译错误（tabIndicatorOffset 找不到）
+- [x] 修复 Logger.kt 编译错误（removeAt 方法问题）
+- [x] 修复 LibraryViewModel.kt 和 PlayerViewModel.kt 编译错误（const val 位置问题）
+- [x] 确保 GitHub Actions workflow 无报错
+- [x] 更新 versionName 到 0.2.2
 
 ## 版本规划
 
