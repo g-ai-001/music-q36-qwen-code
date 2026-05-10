@@ -35,6 +35,7 @@ import app.music_q36_qwen_code.service.MusicService
 import app.music_q36_qwen_code.ui.components.MiniPlayer
 import app.music_q36_qwen_code.ui.screens.HomeScreen
 import app.music_q36_qwen_code.ui.screens.MeScreen
+import app.music_q36_qwen_code.ui.screens.PlayerScreen
 import app.music_q36_qwen_code.ui.theme.MusicPlayerTheme
 import app.music_q36_qwen_code.utils.Logger
 import app.music_q36_qwen_code.viewmodel.LibraryViewModel
@@ -109,8 +110,31 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     var selectedIndex by remember { mutableIntStateOf(0) }
+    var showPlayerScreen by remember { mutableStateOf(false) }
 
     val playerState by playerViewModel.playerState.collectAsState()
+
+    if (showPlayerScreen) {
+        PlayerScreen(
+            currentSong = playerState.currentSong,
+            isPlaying = playerState.isPlaying,
+            currentPosition = playerState.currentPosition,
+            duration = playerState.duration,
+            lyrics = emptyList(), // TODO: 从 LyricParser 加载歌词
+            onPlayPauseClick = { playerViewModel.togglePlayPause() },
+            onNextClick = { /* TODO: 下一首 */ },
+            onPreviousClick = { /* TODO: 上一首 */ },
+            onSeekTo = { position -> playerViewModel.seekTo(position) },
+            onBackClick = { showPlayerScreen = false },
+            onFavoriteClick = {
+                playerState.currentSong?.let { song ->
+                    // TODO: 切换收藏状态
+                }
+            },
+            isFavorite = false // TODO: 从 ViewModel 获取收藏状态
+        )
+        return
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -122,7 +146,7 @@ fun MainScreen(
                         currentSong = playerState.currentSong,
                         isPlaying = playerState.isPlaying,
                         onPlayPauseClick = { playerViewModel.togglePlayPause() },
-                        onExpandClick = { /* TODO: Expand to full player */ }
+                        onExpandClick = { showPlayerScreen = true }
                     )
                 }
 
@@ -169,7 +193,12 @@ fun MainScreen(
                     )
                 }
                 composable("me") {
-                    MeScreen()
+                    MeScreen(
+                        libraryViewModel = libraryViewModel,
+                        onSongClick = { song ->
+                            playerViewModel.playSong(song)
+                        }
+                    )
                 }
             }
         }
