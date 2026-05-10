@@ -1,0 +1,30 @@
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Gradle
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Android Studio
+app/debug/
+app/release/
+*.apk
+!app/src/main/
+
+# Log files
+*.log
+
+# Keystore files
+*.jks
+*.keystore
+
+# Generated files
+/generated/
