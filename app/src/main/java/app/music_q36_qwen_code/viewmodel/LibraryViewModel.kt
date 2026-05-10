@@ -87,10 +87,13 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             return
         }
 
-        viewModelScope.launch {
-            val songs = songDao.searchSongs(query)
-            _searchResults.value = songs
+        // 使用allSongs进行过滤,避免Flow嵌套问题
+        val allSongs = _allSongs.value
+        val results = allSongs.filter { 
+            it.title.contains(query, ignoreCase = true) || 
+            it.artist.contains(query, ignoreCase = true) 
         }
+        _searchResults.value = results
     }
 
     fun getSongCount(): Int {
