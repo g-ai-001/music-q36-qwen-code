@@ -4,6 +4,22 @@
 - **0.1.0** (已发布) - 初始版本开发完成 ✅
 - **0.2.0** (已发布) - 完善首页、我的页面、播放详情页 UI ✅
 - **0.2.1** (已发布) - 修复 CI 构建失败问题（Room 实体缺少主键注解） ✅
+- **0.2.2** (开发中) - 修复 CI 构建失败问题（多个编译错误）
+
+## 当前版本目标: 0.2.2
+
+### 目标
+修复 GitHub Actions CI 构建失败问题，解决所有编译错误。
+
+### 任务清单
+- [ ] 修复 MainActivity.kt 编译错误（mutableStateOf、Column 等 Composable 引用、类型不匹配）
+- [ ] 修复 DatabaseModule.kt 编译错误（Hilt/Dagger 依赖注入问题）
+- [ ] 修复 MusicService.kt 编译错误（MediaSession Token 类型不匹配）
+- [ ] 修复 HomeScreen.kt 编译错误（tabIndicatorOffset 找不到）
+- [ ] 修复 Logger.kt 编译错误（removeAt 方法问题）
+- [ ] 修复 LibraryViewModel.kt 和 PlayerViewModel.kt 编译错误（const val 位置问题）
+- [ ] 确保 GitHub Actions workflow 无报错
+- [ ] 更新 versionName 到 0.2.2
 
 ## 版本规划
 
@@ -11,6 +27,7 @@
 - **0.1.0**: 基础项目架构搭建，实现核心音乐播放功能
 - **0.2.0**: 完善首页和我的页面UI
 - **0.2.1**: 修复 CI 构建失败（PlaylistSongMap 缺少 @PrimaryKey）
+- **0.2.2**: 修复 CI 构建失败（多个编译错误：Composable引用、Hilt依赖、类型不匹配等）
 - **0.3.0**: 歌词解析与显示功能
 
 ### 中期规划 (0.4.x - 0.6.x)

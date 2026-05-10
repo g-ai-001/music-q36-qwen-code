@@ -136,8 +136,8 @@ class MusicService : MediaSessionService() {
                 createPendingIntent(PlayerAction.NEXT)
             )
             .setStyle(
-                Notification.MediaStyle()
-                    .setMediaSession(mediaSession?.sessionCompatToken)
+                androidx.media.app.Notification.MediaStyle()
+                    .setMediaSession(mediaSession?.token)
                     .setShowActionsInCompactView(0, 1, 2)
             )
 

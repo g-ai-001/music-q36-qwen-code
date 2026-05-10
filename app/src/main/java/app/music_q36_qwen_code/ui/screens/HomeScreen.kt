@@ -127,7 +127,9 @@ fun HomeScreen(
                 if (selectedTab < tabPositions.size) {
                     Box(
                         modifier = Modifier
-                            .tabIndicatorOffset(tabPositions[selectedTab])
+                            .fillMaxWidth()
+                            .offset(x = tabPositions[selectedTab].left)
+                            .width(tabPositions[selectedTab].width)
                             .height(3.dp)
                             .background(
                                 color = Color(0xFF81C784),

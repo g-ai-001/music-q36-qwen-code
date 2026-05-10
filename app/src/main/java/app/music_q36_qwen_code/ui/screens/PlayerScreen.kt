@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -39,13 +40,13 @@ import kotlin.math.abs
 fun PlayerScreen(
     currentSong: Song?,
     isPlaying: Boolean,
-    currentPosition: Int,
-    duration: Int,
+    currentPosition: Long,
+    duration: Long,
     lyrics: List<Pair<Long, String>>,
     onPlayPauseClick: () -> Unit,
     onNextClick: () -> Unit,
     onPreviousClick: () -> Unit,
-    onSeekTo: (Int) -> Unit,
+    onSeekTo: (Long) -> Unit,
     onBackClick: () -> Unit,
     onFavoriteClick: () -> Unit,
     isFavorite: Boolean
@@ -239,13 +240,13 @@ fun TopBar(
 fun CoverModeContent(
     currentSong: Song,
     isPlaying: Boolean,
-    currentPosition: Int,
-    duration: Int,
+    currentPosition: Long,
+    duration: Long,
     lyrics: List<Pair<Long, String>>,
     onPlayPauseClick: () -> Unit,
     onNextClick: () -> Unit,
     onPreviousClick: () -> Unit,
-    onSeekTo: (Int) -> Unit
+    onSeekTo: (Long) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -338,7 +339,7 @@ fun LyricsModeContent(
     songTitle: String,
     artist: String,
     lyrics: List<Pair<Long, String>>,
-    currentPosition: Int,
+    currentPosition: Long,
     onPlayPauseClick: () -> Unit,
     isPlaying: Boolean
 ) {
@@ -448,9 +449,9 @@ fun LyricsModeContent(
 
 @Composable
 fun ProgressBar(
-    currentPosition: Int,
-    duration: Int,
-    onSeekTo: (Int) -> Unit
+    currentPosition: Long,
+    duration: Long,
+    onSeekTo: (Long) -> Unit
 ) {
     val currentProgress = if (duration > 0) currentPosition.toFloat() / duration else 0f
     var sliderPosition by remember { mutableFloatStateOf(currentProgress) }
@@ -593,7 +594,7 @@ fun ModeButton(
     }
 }
 
-fun formatTime(milliseconds: Int): String {
+fun formatTime(milliseconds: Long): String {
     val seconds = milliseconds / 1000
     val minutes = seconds / 60
     val remainingSeconds = seconds % 60

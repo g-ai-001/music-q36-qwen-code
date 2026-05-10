@@ -58,7 +58,7 @@ object Logger {
         try {
             val logFiles = logDir.listFiles { file ->
                 file.name.startsWith(LOG_FILE_PREFIX) && file.name.endsWith(LOG_FILE_EXTENSION)
-            }?.sortedBy { it.lastModified() } ?: return
+            }?.sortedBy { it.lastModified() }?.toMutableList() ?: return
 
             while (logFiles.size > MAX_LOG_FILES) {
                 logFiles.removeAt(0).delete()

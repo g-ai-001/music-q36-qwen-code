@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
  * 管理播放状态和歌词
  */
 class PlayerViewModel(application: Application) : AndroidViewModel(application) {
-    private const val TAG = "PlayerViewModel"
+    private val TAG = "PlayerViewModel"
 
     private val songDao: SongDao
     private val favoriteDao: FavoriteDao

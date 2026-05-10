@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
  * 管理歌曲列表、扫描、搜索等功能
  */
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
-    private const val TAG = "LibraryViewModel"
+    private val TAG = "LibraryViewModel"
 
     private val songDao: SongDao
     private val favoriteDao: FavoriteDao
