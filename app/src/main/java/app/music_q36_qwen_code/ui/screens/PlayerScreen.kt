@@ -1,10 +1,7 @@
 package app.music_q36_qwen_code.ui.screens
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -15,15 +12,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.music_q36_qwen_code.data.model.Song
+import app.music_q36_qwen_code.ui.theme.*
 import kotlin.math.abs
 
 /**
@@ -147,16 +142,16 @@ enum class PlayerMode {
 
 @Composable
 fun AlbumArtBackground(modifier: Modifier = Modifier) {
-    // 这里使用渐变模拟专辑封面背景，实际应该提取专辑封面颜色
+    // 使用主题色渐变模拟专辑封面背景
     Box(
         modifier = modifier
             .blur(50.dp)
             .background(
                 Brush.radialGradient(
                     colors = listOf(
-                        Color(0xFF667eea),
-                        Color(0xFF764ba2),
-                        Color(0xFF1A1A2E)
+                        PurpleGradientStart,
+                        PurpleGradientEnd,
+                        DarkOverlay
                     )
                 )
             )
@@ -261,8 +256,8 @@ fun CoverModeContent(
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF667eea),
-                            Color(0xFF764ba2)
+                            PurpleGradientStart,
+                            PurpleGradientEnd
                         )
                     )
                 ),
@@ -302,8 +297,7 @@ fun CoverModeContent(
 
         // 歌词预览（显示当前行）
         if (lyrics.isNotEmpty()) {
-            val currentPositionMs = currentPosition * 1000L
-            val currentLyricIndex = lyrics.indexOfLast { it.first <= currentPositionMs }
+            val currentLyricIndex = lyrics.indexOfLast { it.first <= currentPosition }
             val currentLyric = if (currentLyricIndex >= 0) {
                 lyrics[currentLyricIndex].second
             } else {
@@ -351,12 +345,11 @@ fun LyricsModeContent(
     isPlaying: Boolean
 ) {
     val listState = rememberLazyListState()
-    val currentPositionMs = currentPosition * 1000L
 
     // 自动滚动到当前歌词行
-    LaunchedEffect(lyrics, currentPositionMs) {
+    LaunchedEffect(lyrics, currentPosition) {
         if (lyrics.isNotEmpty()) {
-            val currentIndex = lyrics.indexOfLast { it.first <= currentPositionMs }
+            val currentIndex = lyrics.indexOfLast { it.first <= currentPosition }
             if (currentIndex >= 0) {
                 listState.animateScrollToItem(
                     index = currentIndex,
@@ -408,7 +401,7 @@ fun LyricsModeContent(
                 state = listState
             ) {
                 itemsIndexed(lyrics) { index, lyric ->
-                    val timeDiff = abs(lyric.first - currentPositionMs)
+                    val timeDiff = abs(lyric.first - currentPosition)
                     val isCurrentLine = timeDiff < 3000L
 
                     Text(
@@ -456,7 +449,7 @@ fun LyricsModeContent(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF81C784))
+                    .background(ButtonGreen)
             ) {
                 Icon(
                     imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
@@ -488,8 +481,8 @@ fun ProgressBar(
                 onSeekTo((sliderPosition * duration).toLong())
             },
             colors = SliderDefaults.colors(
-                thumbColor = Color(0xFF81C784),
-                activeTrackColor = Color(0xFF81C784),
+                thumbColor = ButtonGreen,
+                activeTrackColor = ButtonGreen,
                 inactiveTrackColor = Color.White.copy(alpha = 0.2f)
             )
         )
@@ -540,7 +533,7 @@ fun PlayerControls(
             modifier = Modifier
                 .size(72.dp)
                 .clip(CircleShape)
-                .background(Color(0xFF81C784))
+                .background(ButtonGreen)
         ) {
             Icon(
                 imageVector = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
@@ -603,7 +596,7 @@ fun ModeButton(
         modifier = Modifier
             .clip(RoundedCornerShape(16.dp))
             .background(
-                if (isSelected) Color(0xFF81C784) else Color.Transparent
+                if (isSelected) ButtonGreen else Color.Transparent
             )
             .clickable(onClick = onClick)
             .padding(horizontal = 20.dp, vertical = 8.dp),

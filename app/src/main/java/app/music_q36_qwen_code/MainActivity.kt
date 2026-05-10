@@ -102,6 +102,7 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Logger.i(TAG, "MainActivity destroyed")
+        Logger.close()
     }
 }
 

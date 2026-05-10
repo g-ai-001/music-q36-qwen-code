@@ -42,6 +42,10 @@ class MusicService : MediaSessionService() {
 
         // Initialize ExoPlayer
         val player = ExoPlayer.Builder(this).build()
+        
+        // Inject ExoPlayer to PlayerManager
+        PlayerManager.setPlayerInstance(player)
+        
         mediaSession = MediaSession.Builder(this, player).build()
 
         // Setup player listener
@@ -60,7 +64,9 @@ class MusicService : MediaSessionService() {
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 Logger.d(TAG, "Playing state changed: $isPlaying")
-                PlayerManager.play()
+                // Update PlayerManager state without calling play() to avoid circular calls
+                val currentState = PlayerManager.playerState.value
+                // We don't update the state here because PlayerManager already handles this
                 updateNotification()
             }
         })

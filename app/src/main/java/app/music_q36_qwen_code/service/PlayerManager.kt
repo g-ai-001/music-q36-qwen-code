@@ -35,8 +35,16 @@ object PlayerManager {
     private val _playerState = MutableStateFlow(PlayerState())
     val playerState: StateFlow<PlayerState> = _playerState.asStateFlow()
 
-    // 实际的ExoPlayer实例将在服务中创建
+    // 实际的ExoPlayer实例，由MusicService注入
     private var exoPlayer: androidx.media3.exoplayer.ExoPlayer? = null
+
+    /**
+     * 设置ExoPlayer实例，由MusicService调用
+     */
+    fun setPlayerInstance(player: androidx.media3.exoplayer.ExoPlayer) {
+        exoPlayer = player
+        Logger.i(TAG, "ExoPlayer instance set")
+    }
 
     fun initialize() {
         Logger.i(TAG, "PlayerManager initialized")
@@ -50,16 +58,29 @@ object PlayerManager {
             currentPosition = 0,
             duration = song.duration
         )
+        
+        // 控制实际的ExoPlayer
+        exoPlayer?.let { player ->
+            try {
+                val mediaItem = androidx.media3.common.MediaItem.fromUri(song.path)
+                player.setMediaItem(mediaItem)
+                player.prepare()
+            } catch (e: Exception) {
+                Logger.e(TAG, "Failed to prepare ExoPlayer", e)
+            }
+        }
     }
 
     fun play() {
         Logger.i(TAG, "Play")
         _playerState.value = _playerState.value.copy(isPlaying = true)
+        exoPlayer?.play()
     }
 
     fun pause() {
         Logger.i(TAG, "Pause")
         _playerState.value = _playerState.value.copy(isPlaying = false)
+        exoPlayer?.pause()
     }
 
     fun togglePlayPause() {
@@ -73,6 +94,7 @@ object PlayerManager {
     fun seekTo(position: Long) {
         Logger.d(TAG, "Seek to: $position")
         _playerState.value = _playerState.value.copy(currentPosition = position)
+        exoPlayer?.seekTo(position)
     }
 
     fun setPlaylist(playlist: List<Song>, startIndex: Int = 0) {

@@ -105,7 +105,8 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
                 )
                 Logger.i(TAG, "Added to favorites: ${song.title}")
             }
-            _isFavorite.value = !_isFavorite.value
+            // Query from database to ensure state is consistent
+            _isFavorite.value = favoriteDao.isFavorite(song.id)
         }
     }
 

@@ -88,9 +88,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
 
         viewModelScope.launch {
-            songDao.searchSongs(query).onEach { songs ->
-                _searchResults.value = songs
-            }.launchIn(viewModelScope)
+            val songs = songDao.searchSongs(query)
+            _searchResults.value = songs
         }
     }
 

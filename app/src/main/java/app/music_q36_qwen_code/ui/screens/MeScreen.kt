@@ -5,9 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.music_q36_qwen_code.data.model.Song
+import app.music_q36_qwen_code.ui.components.RecentlyPlayedItem
+import app.music_q36_qwen_code.ui.components.SectionHeader
 import app.music_q36_qwen_code.ui.components.SongItem
+import app.music_q36_qwen_code.ui.theme.*
 import app.music_q36_qwen_code.viewmodel.LibraryViewModel
 
 /**
@@ -44,7 +44,7 @@ fun MeScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1A1A2E))
+            .background(DarkOverlay)
     ) {
         // Header 卡片
         item {
@@ -74,7 +74,7 @@ fun MeScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(songs.take(10)) { song ->
-                    RecentlyPlayedCard(
+                    RecentlyPlayedItem(
                         song = song,
                         onClick = { onSongClick(song) }
                     )
@@ -112,9 +112,9 @@ fun HeaderCard() {
             .background(
                 Brush.horizontalGradient(
                     colors = listOf(
-                        Color(0xFFA8E6CF),
-                        Color(0xFF88D8A8),
-                        Color(0xFF4CAF50)
+                        HeaderGradientStart,
+                        HeaderGradientMid,
+                        HeaderGradientEnd
                     )
                 )
             )
@@ -154,7 +154,7 @@ fun HeaderCard() {
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF2E7D32))
+                        .background(VipGreen)
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(
@@ -283,7 +283,7 @@ fun QuickActionItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color(0xFF81C784),
+            tint = ButtonGreen,
             modifier = Modifier.size(28.dp)
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -291,78 +291,6 @@ fun QuickActionItem(
             text = label,
             color = Color.White,
             fontSize = 11.sp
-        )
-    }
-}
-
-@Composable
-fun SectionHeader(
-    title: String,
-    actionText: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = title,
-            color = Color.White,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = actionText,
-            color = Color.Gray,
-            fontSize = 12.sp,
-            modifier = Modifier.clickable { /* TODO */ }
-        )
-    }
-}
-
-@Composable
-fun RecentlyPlayedCard(
-    song: Song,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .width(100.dp)
-            .clickable(onClick = onClick),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF667eea),
-                            Color(0xFF764ba2)
-                        )
-                    )
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.MusicNote,
-                contentDescription = null,
-                tint = Color.White.copy(alpha = 0.7f),
-                modifier = Modifier.size(32.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = song.title,
-            color = Color.White,
-            fontSize = 12.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
         )
     }
 }
@@ -388,8 +316,8 @@ fun PlaylistItemCard(
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
-                            Color(0xFF434343),
-                            Color(0xFF000000)
+                            CardGradientStart,
+                            CardGradientEnd
                         )
                     )
                 ),
@@ -398,7 +326,7 @@ fun PlaylistItemCard(
             Icon(
                 imageVector = Icons.Default.QueueMusic,
                 contentDescription = null,
-                tint = Color(0xFF81C784),
+                tint = ButtonGreen,
                 modifier = Modifier.size(28.dp)
             )
         }
