@@ -135,11 +135,6 @@ class MusicService : MediaSessionService() {
                 "下一首",
                 createPendingIntent(PlayerAction.NEXT)
             )
-            .setStyle(
-                androidx.media.app.Notification.MediaStyle()
-                    .setMediaSession(mediaSession?.token)
-                    .setShowActionsInCompactView(0, 1, 2)
-            )
 
         return builder.build()
     }

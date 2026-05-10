@@ -461,7 +461,7 @@ fun ProgressBar(
             value = sliderPosition,
             onValueChange = { sliderPosition = it },
             onValueChangeFinished = {
-                onSeekTo((sliderPosition * duration).toInt())
+                onSeekTo((sliderPosition * duration).toLong())
             },
             colors = SliderDefaults.colors(
                 thumbColor = Color(0xFF81C784),
