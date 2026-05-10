@@ -1,7 +1,7 @@
 # 项目规划 - music-q36-qwen-code (本地音乐播放器)
 
 ## 版本历史
-- **0.1.0** (首个版本) - 初始版本开发
+- **0.1.0** (已发布) - 初始版本开发完成 ✅
 
 ## 版本规划
 
@@ -27,13 +27,13 @@
 搭建Android项目基础架构，实现核心音乐播放功能。
 
 ### 任务清单
-- [ ] 创建Android项目结构（Kotlin + Jetpack Compose）
-- [ ] 配置Gradle构建文件（versionName: 0.1.0, 包名: app.music_q36_qwen_code）
-- [ ] 配置必要的依赖（Media3/ExoPlayer, Room, Compose）
-- [ ] 实现日志系统（保存在context.getExternalFilesDir(null)）
-- [ ] 实现本地音乐扫描功能（MediaStore扫描）
-- [ ] 实现音乐播放服务（MediaSessionService前台服务）
-- [ ] 实现基础UI（首页歌曲列表 + 底部迷你播放器）
-- [ ] 配置权限（READ_MEDIA_AUDIO）
-- [ ] 配置GitHub Actions构建workflow
-- [ ] 完善README.md
+- [x] 创建Android项目结构（Kotlin + Jetpack Compose）
+- [x] 配置Gradle构建文件（versionName: 0.1.0, 包名: app.music_q36_qwen_code）
+- [x] 配置必要的依赖（Media3/ExoPlayer, Room, Compose）
+- [x] 实现日志系统（保存在context.getExternalFilesDir(null)）
+- [x] 实现本地音乐扫描功能（MediaStore扫描）
+- [x] 实现音乐播放服务（MediaSessionService前台服务）
+- [x] 实现基础UI（首页歌曲列表 + 底部迷你播放器）
+- [x] 配置权限（READ_MEDIA_AUDIO）
+- [x] 配置GitHub Actions构建workflow
+- [x] 完善README.md
