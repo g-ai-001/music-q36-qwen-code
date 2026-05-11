@@ -17,93 +17,47 @@
 
 ## 版本介绍
 
-### v0.3.1 (最新版本)
+### v0.4.0 (最新版本)
 
 **发布日期**: 2026-05-11
 
-**重构优化**:
-- 修复PlayerScreen歌词时间单位不一致Bug(移除错误的*1000)
+**新增功能**:
+- 实现增量扫描机制，只扫描新增/修改的文件，避免全量扫描
+- 添加扫描进度反馈，UI实时显示扫描进度和文件数
+- 实现歌曲排序功能（按标题、艺术家、时长、添加时间排序）
+- 优化扫描结果去重和更新机制，处理文件移动、删除、重命名
+- 完善按艺术家、专辑分组显示功能
+
+**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.4.0)
+
+### v0.1.0 - v0.3.1 (历史版本)
+
+**v0.3.1** (2026-05-11): 重构优化版本，修复关键Bug和优化代码结构
+- 修复PlayerScreen歌词时间单位不一致Bug
 - 修复MainActivity onDestroy中Logger未关闭问题
-- 修复PlayerManager与ExoPlayer脱节问题(添加setPlayerInstance)
+- 修复PlayerManager与ExoPlayer脱节问题
 - 修复MusicService onIsPlayingChanged循环调用问题
 - 修复LibraryViewModel searchSongs嵌套launchIn问题
 - 修复PlayerViewModel toggleFavorite竞态条件问题
-- 提取重复UI组件(RecentlyPlayedItem, SectionHeader)到CommonComponents
-- 统一颜色常量(PurpleGradient, ButtonGreen等)替换硬编码颜色
-- 清理未使用的导入(HomeScreen, MeScreen, PlayerScreen)
-- 优化代码结构和可读性
+- 提取重复UI组件到CommonComponents
+- 统一颜色常量，优化代码结构和可读性
 
-**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.3.1)
-
-### v0.3.0
-
-**发布日期**: 2026-05-11
-
-**新增功能**:
-- 完善歌词解析与显示功能，实现歌词与播放进度同步显示
+**v0.3.0** (2026-05-11): 完善歌词解析与显示功能
+- 实现歌词与播放进度同步显示
 - 封面模式下显示当前歌词行
 - 歌词模式下支持自动滚动到当前歌词行
 - 歌词高亮跟随播放进度
-- 完善收藏功能（添加/移除收藏）
 
-**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.3.0)
+**v0.2.0 - v0.2.2** (2026-05-11): 完善UI和修复CI构建问题
+- 完善首页、我的页面、播放详情页完整UI
+- 实现封面模式/歌词模式切换
+- 实现迷你播放器跨页面持久化
+- 修复多个CI构建失败问题
 
-### v0.2.2
-
-**发布日期**: 2026-05-11
-
-**修复**:
-- 修复 CI 构建失败问题（多个编译错误：Composable引用、Hilt依赖、类型不匹配等）
-- 修复 MainActivity.kt 缺少 mutableStateOf 和 Column 导入
-- 修复 PlayerScreen.kt 时间参数类型从 Int 改为 Long
-- 移除 DatabaseModule.kt 中未使用的 Hilt/Dagger 注解
-- 修复 MusicService.kt 中 MediaSession Token 类型不匹配
-- 修复 HomeScreen.kt 中 tabIndicatorOffset 在 Material3 中已移除
-- 修复 Logger.kt 中 Array 不支持 removeAt
-- 修复 ViewModel 中 const val 不能在类实例中使用
-
-**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.2.2)
-
-### v0.2.1 (已发布)
-
-**发布日期**: 2026-05-11
-
-**修复**:
-- 修复 CI 构建失败问题（PlaylistSongMap 实体添加复合主键注解）
-
-**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.2.1)
-
-### v0.2.0
-
-**发布日期**: 2026-05-11
-
-**新增功能**:
-- 首页完整UI：搜索栏、Tab布局（推荐/歌单/歌手/专辑）、最近播放、本地歌单、歌曲列表
-- 我的页面完整UI：Header卡片（用户信息/VIP徽章）、统计网格、快捷操作、自建歌单
-- 播放详情页（全屏播放器）：封面模式/歌词模式切换、动态模糊背景、专辑封面显示
-- 封面模式：大圆角方形专辑封面、歌曲信息、歌词预览、进度条、播放控制
-- 歌词模式：全屏滚动歌词、当前行高亮、平滑滚动动画
-- 迷你播放器完善：跨页面持久化、点击展开全屏播放器
-- 底部导航栏：首页/我的两个Tab切换
-
-**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.2.0)
-
-### v0.1.0
-
-**发布日期**: 2026-05-10
-
-**功能**:
+**v0.1.0** (2026-05-10): 初始版本
 - 基础项目架构（Kotlin + Jetpack Compose + MVVM）
-- 本地音乐扫描功能（MediaStore）
-- 音乐播放服务（Media3前台服务）
-- Room数据库存储（歌曲、歌单、收藏）
-- 歌词解析器（LRC格式）
-- 日志系统（保存在外部存储目录）
-- 首页歌曲列表
-- 底部迷你播放器
-- 我的页面
-
-**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.1.0)
+- 本地音乐扫描功能、音乐播放服务
+- Room数据库存储、歌词解析器、日志系统
 
 ## 项目结构
 
