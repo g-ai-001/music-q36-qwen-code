@@ -17,7 +17,18 @@
 
 ## 版本介绍
 
-### v0.4.0 (最新版本)
+### v0.4.1 (最新版本)
+
+**发布日期**: 2026-05-11
+
+**修复问题**:
+- 修复 CI 构建失败问题（Room DAO 查询返回 Map 类型错误）
+- 将 getAllSongPathsAndModifiedTimes 方法返回类型从 Map<String, Long> 改为 List<PathAndModifiedTime>
+- 新增 PathAndModifiedTime 数据类用于 Room 查询结果映射
+
+**下载**: [APK下载地址](https://github.com/g-ai-001/music-q36-qwen-code/releases/tag/v0.4.1)
+
+### v0.1.0 - v0.4.0 (历史版本)
 
 **发布日期**: 2026-05-11
 

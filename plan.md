@@ -16,9 +16,9 @@
 修复 GitHub Actions CI 构建失败问题，解决 Room DAO 查询返回 Map 类型的编译错误。
 
 ### 任务清单
-- [ ] 修复 SongDao.kt 第 90 行 getAllSongPathsAndModifiedTimes 方法返回 Map 类型的编译错误
-- [ ] 确保 GitHub Actions workflow 无报错
-- [ ] 更新 versionName 到 0.4.1
+- [x] 修复 SongDao.kt 第 90 行 getAllSongPathsAndModifiedTimes 方法返回 Map 类型的编译错误
+- [x] 确保 GitHub Actions workflow 无报错
+- [x] 更新 versionName 到 0.4.1
 
 ## 当前版本目标: 0.4.0
 
