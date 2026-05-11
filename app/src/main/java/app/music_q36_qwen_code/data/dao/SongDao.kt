@@ -17,11 +17,35 @@ interface SongDao {
     @Query("SELECT * FROM songs ORDER BY dateAdded DESC")
     fun getAllSongs(): Flow<List<Song>>
 
+    @Query("SELECT * FROM songs ORDER BY title ASC")
+    fun getSongsSortedByTitleAsc(): Flow<List<Song>>
+
+    @Query("SELECT * FROM songs ORDER BY title DESC")
+    fun getSongsSortedByTitleDesc(): Flow<List<Song>>
+
+    @Query("SELECT * FROM songs ORDER BY artist ASC, title ASC")
+    fun getSongsSortedByArtistAsc(): Flow<List<Song>>
+
+    @Query("SELECT * FROM songs ORDER BY artist DESC, title ASC")
+    fun getSongsSortedByArtistDesc(): Flow<List<Song>>
+
+    @Query("SELECT * FROM songs ORDER BY duration ASC")
+    fun getSongsSortedByDurationAsc(): Flow<List<Song>>
+
+    @Query("SELECT * FROM songs ORDER BY duration DESC")
+    fun getSongsSortedByDurationDesc(): Flow<List<Song>>
+
+    @Query("SELECT * FROM songs ORDER BY dateAdded ASC")
+    fun getSongsSortedByDateAddedAsc(): Flow<List<Song>>
+
     @Query("SELECT * FROM songs ORDER BY lastPlayedTime DESC LIMIT 20")
     fun getRecentlyPlayed(): Flow<List<Song>>
 
     @Query("SELECT * FROM songs WHERE id = :songId")
     suspend fun getSongById(songId: Long): Song?
+
+    @Query("SELECT * FROM songs WHERE path = :path")
+    suspend fun getSongByPath(path: String): Song?
 
     @Query("SELECT * FROM songs WHERE title LIKE '%' || :query || '%' OR artist LIKE '%' || :query || '%'")
     fun searchSongs(query: String): Flow<List<Song>>
@@ -44,12 +68,24 @@ interface SongDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSongs(songs: List<Song>)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertNewSongs(songs: List<Song>)
+
+    @Update
+    suspend fun updateSongs(songs: List<Song>)
+
     @Delete
     suspend fun deleteSong(song: Song)
+
+    @Query("DELETE FROM songs WHERE path NOT IN (:paths)")
+    suspend fun deleteSongsNotInPaths(paths: List<String>)
 
     @Query("DELETE FROM songs")
     suspend fun deleteAllSongs()
 
     @Query("SELECT COUNT(*) FROM songs")
     fun getSongCount(): Flow<Int>
+
+    @Query("SELECT path, lastModified FROM songs")
+    suspend fun getAllSongPathsAndModifiedTimes(): Map<String, Long>
 }

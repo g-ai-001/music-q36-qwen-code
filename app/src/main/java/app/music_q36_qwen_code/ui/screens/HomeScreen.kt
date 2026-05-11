@@ -41,10 +41,13 @@ fun HomeScreen(
 ) {
     val songs by libraryViewModel.allSongs.collectAsState()
     val isScanning by libraryViewModel.isScanning.collectAsState()
+    val scanProgress by libraryViewModel.scanProgress.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
     var selectedTab by remember { mutableIntStateOf(0) }
+    var showSortMenu by remember { mutableStateOf(false) }
 
     val tabs = listOf("推荐", "歌单", "歌手", "专辑")
+    val sortOptions = listOf("添加时间", "歌曲名", "艺术家", "时长")
 
     Column(
         modifier = Modifier
@@ -73,10 +76,17 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold
             )
             Row {
-                IconButton(onClick = { libraryViewModel.scanMedia() }) {
+                IconButton(onClick = { libraryViewModel.scanMediaWithProgress() }) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
                         contentDescription = "扫描音乐",
+                        tint = Color.White
+                    )
+                }
+                IconButton(onClick = { showSortMenu = true }) {
+                    Icon(
+                        imageVector = Icons.Default.Sort,
+                        contentDescription = "排序",
                         tint = Color.White
                     )
                 }
@@ -87,6 +97,27 @@ fun HomeScreen(
                         tint = Color.White
                     )
                 }
+            }
+        }
+
+        // 排序进度提示
+        if (isScanning && scanProgress != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                LinearProgressIndicator(
+                    progress = { scanProgress!!.percentage / 100f },
+                    modifier = Modifier.fillMaxWidth(),
+                    color = ButtonGreen
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = scanProgress!!.message,
+                    color = Color.White,
+                    fontSize = 12.sp
+                )
             }
         }
 
@@ -231,6 +262,31 @@ fun HomeScreen(
                     // 歌曲列表
                     item {
                         SectionHeader("歌曲列表", "查看更多")
+                        
+                        // 排序菜单
+                        Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                            DropdownMenu(
+                                expanded = showSortMenu,
+                                onDismissRequest = { showSortMenu = false }
+                            ) {
+                                sortOptions.forEachIndexed { index, option ->
+                                    DropdownMenuItem(
+                                        text = { Text(option) },
+                                        onClick = {
+                                            val field = when (index) {
+                                                0 -> "dateAdded"
+                                                1 -> "title"
+                                                2 -> "artist"
+                                                3 -> "duration"
+                                                else -> "dateAdded"
+                                            }
+                                            libraryViewModel.setSortField(field)
+                                            showSortMenu = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     items(songs) { song ->

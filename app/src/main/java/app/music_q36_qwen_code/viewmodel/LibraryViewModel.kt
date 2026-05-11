@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import app.music_q36_qwen_code.data.dao.FavoriteDao
 import app.music_q36_qwen_code.data.dao.SongDao
 import app.music_q36_qwen_code.data.database.MusicDatabase
+import app.music_q36_qwen_code.data.model.ScanProgress
 import app.music_q36_qwen_code.data.model.Song
 import app.music_q36_qwen_code.utils.Logger
 import app.music_q36_qwen_code.utils.MediaScanner
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -38,11 +41,20 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private val _isScanning = MutableStateFlow(false)
     val isScanning: StateFlow<Boolean> = _isScanning.asStateFlow()
 
+    private val _scanProgress = MutableStateFlow<ScanProgress?>(null)
+    val scanProgress: StateFlow<ScanProgress?> = _scanProgress.asStateFlow()
+
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     private val _searchResults = MutableStateFlow<List<Song>>(emptyList())
     val searchResults: StateFlow<List<Song>> = _searchResults.asStateFlow()
+
+    private val _currentSortField = MutableStateFlow("dateAdded")
+    val currentSortField: StateFlow<String> = _currentSortField.asStateFlow()
+
+    private val _currentSortOrder = MutableStateFlow("DESC")
+    val currentSortOrder: StateFlow<String> = _currentSortOrder.asStateFlow()
 
     init {
         val db = MusicDatabase.getInstance(application)
@@ -80,6 +92,66 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun scanMediaWithProgress() {
+        viewModelScope.launch {
+            _isScanning.value = true
+            _scanProgress.value = ScanProgress(isNew = true, message = "开始扫描...")
+
+            try {
+                val existingSongs = _allSongs.value
+
+                MediaScanner.scanAudioFilesWithProgress(
+                    getApplication(),
+                    existingSongs = existingSongs
+                ).collectLatest { progress ->
+                    _scanProgress.value = progress
+
+                    if (!progress.isNew) {
+                        val db = MusicDatabase.getInstance(getApplication())
+                        val songDao = db.songDao()
+
+                        val allPaths = existingSongs.map { it.path }
+                        if (allPaths.isNotEmpty()) {
+                            songDao.deleteSongsNotInPaths(allPaths)
+                        }
+
+                        Logger.i(TAG, "Progress: ${progress.message}")
+                    }
+                }
+            } catch (e: Exception) {
+                Logger.e(TAG, "Failed to scan media with progress", e)
+                _scanProgress.value = ScanProgress(
+                    current = 0,
+                    total = 0,
+                    isNew = false,
+                    message = "扫描失败：${e.message}"
+                )
+            } finally {
+                _isScanning.value = false
+            }
+        }
+    }
+
+    fun setSortField(field: String) {
+        _currentSortField.value = field
+        _currentSortOrder.value = if (_currentSortOrder.value == "ASC") "DESC" else "ASC"
+        observeSortedSongs(field, _currentSortOrder.value)
+    }
+
+    private fun observeSortedSongs(field: String, order: String) {
+        val flow = when (field) {
+            "title" -> if (order == "ASC") songDao.getSongsSortedByTitleAsc() else songDao.getSongsSortedByTitleDesc()
+            "artist" -> if (order == "ASC") songDao.getSongsSortedByArtistAsc() else songDao.getSongsSortedByArtistDesc()
+            "duration" -> if (order == "ASC") songDao.getSongsSortedByDurationAsc() else songDao.getSongsSortedByDurationDesc()
+            "dateAdded" -> if (order == "ASC") songDao.getSongsSortedByDateAddedAsc() else songDao.getAllSongs()
+            else -> songDao.getAllSongs()
+        }
+
+        flow.onEach { songs ->
+            _allSongs.value = songs
+        }.launchIn(viewModelScope)
+    }
+
     fun searchSongs(query: String) {
         _searchQuery.value = query
         if (query.isBlank()) {
@@ -87,11 +159,10 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             return
         }
 
-        // 使用allSongs进行过滤,避免Flow嵌套问题
         val allSongs = _allSongs.value
-        val results = allSongs.filter { 
-            it.title.contains(query, ignoreCase = true) || 
-            it.artist.contains(query, ignoreCase = true) 
+        val results = allSongs.filter {
+            it.title.contains(query, ignoreCase = true) ||
+                    it.artist.contains(query, ignoreCase = true)
         }
         _searchResults.value = results
     }
