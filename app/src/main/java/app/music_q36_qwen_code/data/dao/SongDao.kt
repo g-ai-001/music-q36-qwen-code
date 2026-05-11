@@ -87,5 +87,13 @@ interface SongDao {
     fun getSongCount(): Flow<Int>
 
     @Query("SELECT path, lastModified FROM songs")
-    suspend fun getAllSongPathsAndModifiedTimes(): Map<String, Long>
+    suspend fun getAllSongPathsAndModifiedTimes(): List<PathAndModifiedTime>
 }
+
+/**
+ * 歌曲路径和最后修改时间数据类
+ */
+data class PathAndModifiedTime(
+    val path: String,
+    val lastModified: Long
+)

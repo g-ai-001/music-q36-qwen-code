@@ -8,6 +8,17 @@
 - **0.3.0** (已发布) - 歌词解析与显示功能完善 ✅
 - **0.3.1** (已发布) - 代码质量重构与性能优化 ✅
 - **0.4.0** (已发布) - 本地音乐扫描与筛选优化 ✅
+- **0.4.1** (开发中) - 修复 CI 构建失败问题（Room DAO 查询返回 Map 类型错误）
+
+## 当前版本目标: 0.4.1
+
+### 目标
+修复 GitHub Actions CI 构建失败问题，解决 Room DAO 查询返回 Map 类型的编译错误。
+
+### 任务清单
+- [ ] 修复 SongDao.kt 第 90 行 getAllSongPathsAndModifiedTimes 方法返回 Map 类型的编译错误
+- [ ] 确保 GitHub Actions workflow 无报错
+- [ ] 更新 versionName 到 0.4.1
 
 ## 当前版本目标: 0.4.0
 
