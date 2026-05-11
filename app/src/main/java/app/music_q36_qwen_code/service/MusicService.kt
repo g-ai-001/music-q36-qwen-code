@@ -161,6 +161,12 @@ class MusicService : MediaSessionService() {
         PLAY_PAUSE, PREVIOUS, NEXT
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        // Stop playback when app is removed from recent tasks
+        PlayerManager.pause()
+    }
+
     override fun onDestroy() {
         Logger.i(TAG, "MusicService destroyed")
         mediaSession?.run {
